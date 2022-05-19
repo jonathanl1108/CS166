@@ -1,0 +1,169 @@
+1. 
+(a) { x/A, y/A, z/B}
+(b) Can't achived 
+(c) {B/x , y/A}
+(d) {x/y, John/y} => {y / John, x / John}
+(e) Can't achived 
+
+2. 
+(a)Translate these sentences into formulas in first-order logic.
+
+    • John likes all kinds of food.
+       (A x) ( isFood(x) => like(John, x))
+    • Apples are food.
+        isFood(Apple)
+    • Chicken is food.
+        isFood(Chicken)
+    • Anything someone eats and isn’t killed by is food.
+        (A x)(E h)( Eat(h,x) & ~ kill(h,x) => isFood(x))
+    • If you are killed by something, you are not alive.
+        (A x)(A y)( kill(x ,y) => ~isAlive(x))
+    • Bill eats peanuts and is still alive. *
+        Eat(Bill, penauts)& Alive(Bill)
+    • Sue eats everything Bill eats.
+        (A x)(Eat(Bill, x) => Eat(Sue, x))
+(b) Convert the formulas of part (a) into CNF (also called clausal form).
+
+    • John likes all kinds of food.
+        (~isFood(x1) | like(John, x1))
+    • Apples are food.
+        isFood(Appple)
+    • Chicken is food.
+        isFood(Chicken)
+    • Anything someone eats and isn’t killed by is food.
+        ( (~Eat(h4, x4) | kill(h4,x4)) | isFood(x4))
+    • If you are killed by something, you are not alive.
+        ( ~kill(x5, y5) | ~isAlive(x5))
+    • Bill eats peanuts and is still alive. *
+        Eat(Bill,peanuts) & Alive(Bill)
+    • Sue eats everything Bill eats.
+         ( ~Eat(Bill, x8) | Eat(Sue, x8))
+
+(c)Prove: John likes peanuts.
+
+    step1. use proof by contradtion with reduction 
+    assume John doesn't like peanuts 
+
+    1. ~like(John, peanuts)
+        : assume John doesn't like peanut
+    2. (~isFood(x1) | like(John, x1))
+        : given
+    3. (~isFood(peanuts) | like(John, peanuts))
+        : from 1, then {x1/peanuts}
+    4. ~isFood(peanuts)
+        : reduction(1, 2)
+    5. ((~Eat(h4, x4) | kill(h4,x4)) | isFood(x4))
+        :given
+    6. ((~Eat(Bill, peanuts) | kill(Bill,peanuts)) | isFood(peanuts))
+        :{ h4/Bill, x4/peanuts}
+    7. (~Eat(Bill, peanuts) | kill(Bill,peanuts))
+        : reduction(4,6)
+    8. Eat(Bill,peanuts)
+        : given
+    9. kill(Bill,peanuts)
+        :reduction(7,8)
+    10. ( ~kill(x5, y5) | ~isAlive(x5))
+        :given 
+    11. ( ~kill(Bill, peanuts) | ~isAlive(Bill))
+        :{x5/Bill, y5/peanuts}
+    12. ~isAlive(Bill)
+        : reduction { 10,11}
+    13. Alive(Bill)
+        : given
+    14. {} 
+        : reduction(12,13) #QED John doesn't like peanuts unsat, proof by contracdiction 
+
+
+(d) What food does Sue eat?
+
+    1. Eat(Bill, peanuts) & Alive(Bill)
+        :Given
+
+    2. Eats(Bill, peanuts)
+        :Simplification
+
+    3. ~Eat(Bill, x8) | Eat(Sue, x8)
+        :Given
+
+    4. ~Eats(Bill, peanuts) | Eats(Sue, peanuts)
+        :from 3 apply {x8/peanuts}
+
+    5. Eats(Sue, peanuts)
+        :Resolution(2, 4) 
+        -> Sue eats peanuts
+
+(e)
+    • If you don’t eat, you die.
+        (A x6)(A y6)(~Eat(x6, y6) => Die(x6))
+    • If you die, you are not alive.
+        (A x7)(Die(x7) => ~Alive(x7))
+    • Bill is alive.
+        Alive(Bill)
+
+    CNF KDB
+
+        1.(~isFood(x) | like(John, x))
+    
+        2. isFood(Apple)
+    
+        3. isFood(Chicken)
+   
+        4.( (~Eat(h, x) | kill(h4,x)) | isFood(x))
+    
+        5.( ~kill(x, y) | ~isAlive(x))
+
+        6.Eat(x,y) | Die(x)
+
+        7.~Die(x) | ~Alive(x)
+
+        8.Alive(Bill)
+
+        9.( ~Eat(Bill, x) | Eat(Sue, x))
+        10. (~Die(Bill) | ~Alive(Bill))
+            : to 7 ,{x/Bill}
+        11. ~Die(Bill)
+            : resoultion(8,10)
+        6. Eat(Bill,x) 
+            : to 9 {x/Bill} and resoltuion(6,9)
+        7. Eat(Sue, x)
+
+        inconclusioin, Sue eats everything Bill eats.
+
+3.
+
+A graph file for this graph is also provided (graph1.txt). 
+Convert the graph coloring problem of this graph with 3 colors into a SAT instance using the program you wrote.
+(1). Is the instance satisfiable?
+    : No the graph is not sat with 3-color
+
+Do the conversion again, this time, with 4 colors. Use RSat to solve this new SAT instance. 
+(2). Is the instance satisfiable?
+    :Yes, the grapgh is Sat with 4 color
+
+(3).What do the answers of these two SAT instances tell you about the graph coloring problem of the above graph? 
+    Can you give a solution (a coloring) to the graph coloring problem of the above graph based on the results of RSat?
+    The result found from (1) and (2) shows that graph1 needs at least 4 color in order to have a sat with 
+    graph coloring problem 
+
+
+    v -1 -2 -3 4 -5 -6 7 -8 -9 10 -11 -12 -13 -14 15 -16 17 -18 -19 -20 -21 22 -23 -24 25 -26 -27 -28 0
+    ( 1/R 2/G 3/B 4/Y )
+
+    4 7 10 15 17 22 25
+
+      1 - Yellow
+      2 - Blue
+      3 - Green
+      4 - Blue
+      5 - Red
+      6 - Green
+      7 - Red 
+
+Now, use a similar approach to solve the graph coloring of the graph described in graph2.txt. 
+(4). What is the minimum number of colors required to properly color this graph?
+
+    : 8
+
+
+
+   
